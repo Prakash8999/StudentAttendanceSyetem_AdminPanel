@@ -70,7 +70,7 @@ const AuthContextProvider = ({ children }) => {
 		let month = currentDate.getMonth() + 1
 		let year = currentDate.getFullYear()
 		let finalDate = `${currentDay}-${month}-${year}`
-		
+
 		let obj = {
 			AdminUID: user.uid,
 			...fromstate,

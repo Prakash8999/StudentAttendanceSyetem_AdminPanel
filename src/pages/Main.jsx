@@ -10,7 +10,6 @@ const Main = () => {
   const { generateqrcode, QRstate, user } = UserAuth();
   const navigate = useNavigate();
   const initialstate = {
-    tname: "",
     subname: "",
     department: "",
     year: "",
