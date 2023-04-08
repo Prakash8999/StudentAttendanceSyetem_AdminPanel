@@ -6,8 +6,11 @@ import { UserAuth } from "../context/Auth_context";
 import QRCode from "react-qr-code";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/Input";
+import Attendance from "./Attendance";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db } from "../Firebase_config";
 const Main = () => {
-  const { generateqrcode, QRstate, user } = UserAuth();
+  const {  user, setdata } = UserAuth();
   const navigate = useNavigate();
   const initialstate = {
     subname: "",
@@ -18,7 +21,8 @@ const Main = () => {
     endtime: "",
   };
   const [formstate, setformstate] = useState(initialstate);
-
+  const [QRstate, setQRstate] = useState("");
+  const [attendance, setatt] = useState([])
   const handlechange = (e) => {
     setformstate({
       ...formstate,
@@ -26,10 +30,43 @@ const Main = () => {
     });
   };
 
-  const attendance = () => {
-    navigate("/attendance");
-  };
+  // const attendance = () => {
+  //   navigate("/attendance");
+  // };
+// formstate(setdata)
+const generateqrcode = (fromstate) => {
 
+  let currentDate = new Date();
+  let currentDay = currentDate.getDate()
+  let month = currentDate.getMonth() + 1
+  let year = currentDate.getFullYear()
+  let finalDate = `${currentDay}-${month}-${year}`
+
+  let obj = {
+    AdminUID: user.uid,
+    ...fromstate,
+    date: finalDate,
+    time: currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.setSeconds()
+  }
+  let QRstatefinal = JSON.stringify(obj)
+  setQRstate(QRstatefinal);
+  console.log("department is " + `${formstate.department}-${formstate.year}-${formstate.subname}` );
+  const q = query(collection(db, `${formstate.department}-${formstate.year}-${formstate.subname}` ));
+		const unsubscribe = onSnapshot(q, (querySnapshot) => {
+			const temp = [];
+			querySnapshot.forEach((document) => {
+				temp.push({ ...document.data(), Id: document.id });
+				console.log(document.data());
+				console.log(document.id);
+			});
+			setatt(temp)
+			console.log(attendance);
+		});
+
+  console.log(QRstatefinal)
+  // setdata(fromstate)
+
+};
   return (
     <Layout>
       <div className="flex ">
@@ -84,19 +121,22 @@ const Main = () => {
 
               <div className="flex items-center justify-between">
                 <button
-                  onClick={() => generateqrcode(formstate, user)}
+                  onClick={() => generateqrcode(formstate, user)
+                
+                  }
                   type="button"
                   className="bg-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 mr-20"
                 >
                   Generate QR
                 </button>
-                <button
+
+                {/* <button
                   onClick={attendance}
                   type="button"
                   className="bg-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 ml-20"
                 >
                   Attendance
-                </button>
+                </button> */}
               </div>
             </form>
           </div>
@@ -111,6 +151,43 @@ const Main = () => {
           />
         </div>
       </div>
+
+      <div></div>
+<hr />
+    
+        {/* <Attendance/>
+        
+        */}
+
+
+<p className="w-full h-fit flex justify-center font-bold text-2xl">Attedance</p>
+<div className="flex justify-center">
+
+<div className="flex justify-between w-[70vw] px-96 pb-4">
+<p className="text-2xl">Name</p>
+<p className="text-2xl">Roll</p>
+</div>
+</div>
+{
+  attendance?.map((value,index)=>{
+    return <div key={"index" +index}>
+      <div className="w-full flex justify-center">
+
+<div className="flex justify-between px-96 w-[70vw] ">
+
+<div>
+  <p>{value?.name}</p>
+</div>
+<div>
+<p>{value?.rollno}</p>
+</div>
+      </div>
+
+      </div>
+  </div>
+  })
+}
+
     </Layout>
   );
 };

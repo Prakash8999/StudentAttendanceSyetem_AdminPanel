@@ -10,6 +10,7 @@ const AuthContext = createContext()
 const AuthContextProvider = ({ children }) => {
 	const [user, setuser] = useState()
 	const [QRstate, setQRstate] = useState("");
+	const [data, setdata] = useState([])
 
 	const navigate = useNavigate()
 
@@ -63,29 +64,31 @@ const AuthContextProvider = ({ children }) => {
 				console.log(errorCode);
 			});
 	};
-	const generateqrcode = (fromstate) => {
+	// const generateqrcode = (fromstate) => {
 
-		let currentDate = new Date();
-		let currentDay = currentDate.getDate()
-		let month = currentDate.getMonth() + 1
-		let year = currentDate.getFullYear()
-		let finalDate = `${currentDay}-${month}-${year}`
+	// 	let currentDate = new Date();
+	// 	let currentDay = currentDate.getDate()
+	// 	let month = currentDate.getMonth() + 1
+	// 	let year = currentDate.getFullYear()
+	// 	let finalDate = `${currentDay}-${month}-${year}`
 
-		let obj = {
-			AdminUID: user.uid,
-			...fromstate,
-			date: finalDate,
-			time: currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.setSeconds()
-		}
-		let QRstatefinal = JSON.stringify(obj)
-		setQRstate(QRstatefinal)
-		console.log(QRstatefinal)
+	// 	let obj = {
+	// 		AdminUID: user.uid,
+	// 		...fromstate,
+	// 		date: finalDate,
+	// 		time: currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.setSeconds()
+	// 	}
+	// 	let QRstatefinal = JSON.stringify(obj)
+	// 	setQRstate(QRstatefinal);
 
 
-	};
+	// 	console.log(QRstatefinal)
+	// 	setdata(fromstate)
+
+	// };
 
 	return (
-		<AuthContext.Provider value={{ handleSignup, handleLogin, generateqrcode, QRstate }}>
+		<AuthContext.Provider value={{ handleSignup, handleLogin, QRstate, setdata, data, setQRstate,user }}>
 			{children}
 		</AuthContext.Provider>
 	)
