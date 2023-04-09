@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { auth, db } from '../Firebase_config';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 
@@ -36,10 +38,19 @@ const AuthContextProvider = ({ children }) => {
 				})
 				setuser(user)
 				console.log(user)
-				console.log(user.uid + "" +user.email)
+				console.log(user.uid + "" + user.email)
 				// ...
 			}).then(() => {
-				alert("account created sucessfully")
+				toast.success("Signup Sucessfully!", {
+					position: "top-center",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: false,
+					pauseOnHover: false,
+					draggable: false,
+					progress: false,
+					theme: "light",
+				});
 				navigate("/main")
 			}).catch((err) => {
 				console.error(err);
@@ -54,7 +65,16 @@ const AuthContextProvider = ({ children }) => {
 				console.log(user)
 			})
 			.then(() => {
-				alert("login sucessfully")
+				toast.success("Login Sucessfully!", {
+					position: "top-center",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: false,
+					pauseOnHover: false,
+					draggable: false,
+					progress: false,
+					theme: "light",
+				});
 				navigate("/main");
 			})
 			.catch((error) => {
@@ -88,9 +108,12 @@ const AuthContextProvider = ({ children }) => {
 	// };
 
 	return (
-		<AuthContext.Provider value={{ handleSignup, handleLogin, QRstate, setdata, data, setQRstate,user }}>
-			{children}
-		</AuthContext.Provider>
+		<>
+			<ToastContainer />
+			<AuthContext.Provider value={{ handleSignup, handleLogin, QRstate, setdata, data, setQRstate, user }}>
+				{children}
+			</AuthContext.Provider>
+		</>
 	)
 }
 const UserAuth = () => {
