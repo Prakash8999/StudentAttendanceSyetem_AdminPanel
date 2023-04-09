@@ -36,7 +36,7 @@ const AuthContextProvider = ({ children }) => {
 				})
 				setuser(user)
 				console.log(user)
-				console.log(user.uid)
+				console.log(user.uid + "" +user.email)
 				// ...
 			}).then(() => {
 				alert("account created sucessfully")

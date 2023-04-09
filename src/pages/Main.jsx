@@ -7,8 +7,10 @@ import QRCode from "react-qr-code";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import Attendance from "./Attendance";
-import { collection, onSnapshot, query } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../Firebase_config";
+import { Button } from '@material-ui/core';
+import * as XLSX from 'xlsx';
 const Main = () => {
   const {  user, setdata } = UserAuth();
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const Main = () => {
   const [formstate, setformstate] = useState(initialstate);
   const [QRstate, setQRstate] = useState("");
   const [attendance, setatt] = useState([])
+  const [date, setdate] = useState()
   const handlechange = (e) => {
     setformstate({
       ...formstate,
@@ -51,6 +54,7 @@ const generateqrcode = (fromstate) => {
   let QRstatefinal = JSON.stringify(obj)
   setQRstate(QRstatefinal);
   console.log("department is " + `${formstate.department}-${formstate.year}-${formstate.subname}` );
+  // const q = query(collection(db, `${formstate.department}-${formstate.year}-${formstate.subname}` ), where(formstate.date , '==' ));
   const q = query(collection(db, `${formstate.department}-${formstate.year}-${formstate.subname}` ));
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
 			const temp = [];
@@ -67,6 +71,25 @@ const generateqrcode = (fromstate) => {
   // setdata(fromstate)
 
 };
+
+
+
+  const handleExport = () => {
+    // Convert the data to a worksheet
+const filter = attendance.filter((item)=>{
+  attendance.includes(item.name)
+})
+    const worksheet = XLSX.utils.json_to_sheet(attendance);
+
+    // Create a workbook and add the worksheet to it
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+    // Save the workbook as an Excel file
+    XLSX.writeFile(workbook, 'my-data.xlsx');
+  };
+
+
   return (
     <Layout>
       <div className="flex ">
@@ -160,10 +183,12 @@ const generateqrcode = (fromstate) => {
         */}
 
 
-<p className="w-full h-fit flex justify-center font-bold text-2xl">Attedance</p>
+<p className="w-full h-fit flex justify-center font-bold text-2xl pb-5">Attedance</p>
 <div className="flex justify-center">
 
-<div className="flex justify-between w-[70vw] px-96 pb-4">
+<div className="flex justify-between w-[70vw] px-72 pb-4">
+  
+<p className="text-2xl">Serial</p>
 <p className="text-2xl">Name</p>
 <p className="text-2xl">Roll</p>
 </div>
@@ -171,9 +196,14 @@ const generateqrcode = (fromstate) => {
 {
   attendance?.map((value,index)=>{
     return <div key={"index" +index}>
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center pb-10">
 
-<div className="flex justify-between px-96 w-[70vw] ">
+<div className="flex justify-between px-72 w-[70vw] ">
+
+
+<div>
+  <p>{index+1}</p>
+</div>
 
 <div>
   <p>{value?.name}</p>
@@ -187,7 +217,15 @@ const generateqrcode = (fromstate) => {
   </div>
   })
 }
+<div className="w-full flex justify-center pb-5">
 
+      <Button variant="contained" color="primary" onClick={handleExport}>
+        Export to Excel
+      </Button>
+</div>
+
+
+  
     </Layout>
   );
 };

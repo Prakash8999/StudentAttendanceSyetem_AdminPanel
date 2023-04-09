@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Main from './pages/Main';
 import Signup from './pages/Signup';
 import Attendance from './pages/Attendance';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/main" element={<Main />} />
             <Route path="/attendance" element={<Attendance />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </AuthContextProvider>
       </Router>
