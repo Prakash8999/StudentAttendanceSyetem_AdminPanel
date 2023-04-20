@@ -20,8 +20,8 @@ const Login = () => {
 
   return (
     <div>
-      <Layout>
-        <div className="md:w-[50%] md:h-[80%]  h-[60vh] w-[80vw] bg-white rounded-md  flex flex-col items-center gap-2	 justify-center">
+      <Layout className={'flex justify-center items-center'}>
+        <div className="md:w-[50%] md:h-[80%]  h-[60vh] w-[80vw] bg-white rounded-md  flex flex-col items-center gap-2	 justify-center py-4">
           <form action="" className="flex flex-col justify-center  items-center gap-y-5">
             <h1 className="text-black text-3xl font-semibold text-center">
               Login Here
@@ -51,7 +51,7 @@ const Login = () => {
               onClick={() => {
                 handleLogin(formstate);
               }}
-              className="bg-purple-500 text-center text-xl text-white rounded-lg py-2 hover:bg-purple-400"
+              className="bg-purple-500 text-center text-xl text-white rounded-lg py-2 px-2 hover:bg-purple-400"
             >
               Login
             </button>

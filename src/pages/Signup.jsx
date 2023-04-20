@@ -22,8 +22,8 @@ const Signup = () => {
   };
   return (
     <div>
-      <Layout>
-        <div className="md:w-[50%] md:h-[80%] h-[60vh] w-[80vw] bg-white m-auto rounded-md flex flex-col justify-center items-center gap-2 gap-y-10	">
+      <Layout className={'flex justify-center items-center '}>
+        <div className="md:w-[50%] md:h-[80%] h-[60vh] w-[80vw] bg-white m-auto rounded-md flex flex-col justify-center items-center gap-2 gap-y-10	py-3">
           
           <form action="" className="flex flex-col justify-center items-center gap-y-5">
             <h1 className="text-black text-xl font-semibold text-center">
